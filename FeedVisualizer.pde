@@ -3,10 +3,8 @@ import java.util.*;
 import java.text.*;
 import java.security.MessageDigest;
 import java.util.Map;
-import java.text.Normalizer;
-import java.text.Normalizer.Form;
 
-String[] titles;
+String[] titles = {" "," "," "," "," "," "};
 
 ArrayList <Noticia> noticias ;
 ControlP5 cp5;
@@ -20,7 +18,6 @@ int index;
 Textarea descriptionText;
 Textarea titletext;
 Textarea countertext;
-Boolean firstlaunch = true;
 
 ScrollableList newslist;
 Textfield searchText;
@@ -29,58 +26,58 @@ Button refresh;
 Button linkbutton;
 
 void setup() {
-  
-  background(40);
+  background(0);
   n_size = 0;
   noticias = new ArrayList();
   url = null;
   size(1000, 700);
   cp5 = new ControlP5(this);
-
   font_title = loadFont("Calibri-Bold-20.vlw");
   font = loadFont("Calibri-18.vlw");
   counter_font = loadFont("Calibri-Bold-42.vlw");
-
-  titletext = cp5.addTextarea("ttxt")
+  
+   titletext = cp5.addTextarea("ttxt")
     .setPosition(6, 475)
-    .setSize(895, 45)
+    .setSize(985, 25)
     .setFont(font_title)
-    .hideScrollbar() 
     .setLineHeight(18)
     .setColor(color(255))
-    .setColorBackground(40)
-    .setColorForeground(40)
-    .setText("");
+    .setColorBackground(00)
+    .setColorForeground(00);
+  titletext.setText("");
 
-  newslist = cp5.addScrollableList("News")
+  
+      //updateList();
+    
+    newslist = cp5.addScrollableList("News")
     .setPosition(6, 65)
     .setSize(985, 400)
     .setBarHeight(25)
+    .addItems(titles)
     .setItemHeight(25)
     .setBarVisible(true) 
     .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
     ;
-
+    
   descriptionText = cp5.addTextarea("dtxt")
-    .setPosition(6, 525)
-    .setSize(985, 170)
+    .setPosition(6, 500)
+    .setSize(985, 175)
     .setFont(font)
     .setLineHeight(18)
     .setColor(color(255))
-    .setColorBackground(40)
-    .setColorForeground(40);
+    .setColorBackground(00)
+    .setColorForeground(00);
   descriptionText.setText("");
 
 
   countertext = cp5.addTextarea("itxt")
-    .setPosition(6, 685)
-    .setSize(1000, 25)
+    .setPosition(5, 685)
+    .setSize(300, 25)
     .setFont(font)
     .setLineHeight(18)
-    .hideScrollbar() 
     .setColor(color(255))
-    .setColorBackground(40)
-    .setColorForeground(40);
+    .setColorBackground(00)
+    .setColorForeground(00);
   countertext.setText("");
 
   searchText = cp5.addTextfield("Search")
@@ -94,25 +91,28 @@ void setup() {
 
   searchbutton = cp5.addButton("SEARCH")
     .setValue(0)
-    .setPosition(425, 10)
+    .setPosition(430, 10)
     .setSize(200, 50)
     ;
-
-  refresh = cp5.addButton("REFRESH")
+  
+    refresh = cp5.addButton("REFRESH")
     .setValue(0)
-    .setPosition(635, 10)
+    .setPosition(640, 10)
     .setSize(200, 50)
     ;
-
+    
   linkbutton = cp5.addButton("OPEN")
     .setValue(0)
-    .setPosition(900, 475)
-    .setSize(90, 50)
+    .setPosition(880, 475)
+    .setSize(110, 30)
     ;
+ 
+
+
 }
 
 void draw() {
-  background(40);
+  background(00);
 }
 
 void News(int n) {
@@ -136,11 +136,7 @@ public void REFRESH() {
   }
   newslist.clear();
   newslist.update();
-  if (firstlaunch) {
-    firstlaunch = false;
-  } else {
-    updateList();
-  }
+  updateList();
   println("a button event from REFRESH");
   titles = clearList(titles);
   newslist.addItems(titles);
@@ -198,6 +194,15 @@ String createHash(String text) {
   }
 }
 
+void processList(){
+  for (Noticia noticia1 : noticias){
+      for (Noticia noticia2 : noticias){
+        int distance = noticia1.getDistance(noticia2.description);
+        noticia1.distances.append(distance);
+  }
+  }
+}
+
 void updateList() {
 
   titles = null;
@@ -206,44 +211,76 @@ void updateList() {
   // Load RSS feed
   for (int x=0; x<rss_feeds.getRowCount(); x++) {
 
-
+    
     // Obtenemos la info de clasificiación guardada en el csv
     String source = rss_feeds.getString(x, 0);
     String section = rss_feeds.getString(x, 1);
-
+    
     if (source.indexOf("#")==-1) {
       println(rss_feeds.getString(x, 2));
       String url = rss_feeds.getString(x, 2);
-      try {
-        XML rss = loadXML(url);
-        // Extrae el titulo, 
-        XML[] titleXMLElements = rss.getChildren("channel/item/title");
-        XML[] linkXMLElements = rss.getChildren("channel/item/link");
-        XML[] descriptionXMLElements = rss.getChildren("channel/item/description");
-        XML[] pubDateXMLElements = rss.getChildren("channel/item/pubDate");
+      XML rss = loadXML(url);
+      // Extrae el titulo, 
+      XML[] titleXMLElements = rss.getChildren("channel/item/title");
+      XML[] linkXMLElements = rss.getChildren("channel/item/link");
+      XML[] descriptionXMLElements = rss.getChildren("channel/item/description");
+      XML[] pubDateXMLElements = rss.getChildren("channel/item/pubDate");
 
-        //titles = new String[titleXMLElements.length];
-        for (int i = 0; i < titleXMLElements.length; i++) {
-          // La fecha es del tipo:     <pubDate><![CDATA[Wed, 18 Nov 2015 15:46:51 +0100]]></pubDate>
-          Noticia temp_not = new Noticia(titleXMLElements[i].getContent(), linkXMLElements[i].getContent(), descriptionXMLElements[i].getContent(), pubDateXMLElements[i].getContent());
-          temp_not.addCSVinfo(source, section);
-          n_size++;
-          DateFormat df = new SimpleDateFormat("dd/M/yyyy");
-          String datext = df.format(new Date());
-          if (temp_not.getDate().equals(datext)) noticias.add(temp_not);
-        }
-      }
-      catch(Exception e) {
-        println("Error");
+      //titles = new String[titleXMLElements.length];
+      for (int i = 0; i < titleXMLElements.length; i++) {
+        // La fecha es del tipo:     <pubDate><![CDATA[Wed, 18 Nov 2015 15:46:51 +0100]]></pubDate>
+        Noticia temp_not = new Noticia(titleXMLElements[i].getContent(), linkXMLElements[i].getContent(), descriptionXMLElements[i].getContent(), pubDateXMLElements[i].getContent());
+        temp_not.addCSVinfo(source, section);
+        n_size++;
+        noticias.add(temp_not);
       }
     }
   }
-
+  
+  println("Processing Distances");
+  processList();
+  println("Most important new is:");
+  showMostImportant();
+  ComputeSimilarities();
+  
   ArrayList<String> temp_array = new ArrayList();
   for (Noticia noticia : noticias) {
     temp_array.add(noticia.title);
   }
   titles = temp_array.toArray(new String[temp_array.size()]);
+
+}
+
+void showMostImportant(){
+  int max_dist = 0;
+  Noticia max_new = new Noticia("","","","");
+  for(Noticia noticia : noticias){
+    if(noticia.getMeanDistance() > max_dist){
+      max_dist = noticia.getMeanDistance();
+      max_new = noticia;
+    }
+  }
+  println(max_new.title);
+}
+
+void ComputeSimilarities(){
+  for(Noticia noticia : noticias){
+    noticia.similarTitle = getMostSimilar(noticia.description);
+  }
+}
+
+String getMostSimilar(String word){
+  int max_dist = 0;
+  Noticia max_new = new Noticia("","","","");
+  for(Noticia noticia : noticias){
+    if(noticia.description.indexOf(word)==-1){
+      if(noticia.getDistance(word) > max_dist){
+        max_dist = noticia.getMeanDistance();
+        max_new = noticia;
+      }
+    }
+  }
+  return max_new.title;
 }
 
 String[] clearList(String[] list) {
@@ -256,15 +293,9 @@ String[] clearList(String[] list) {
 }
 
 void keyPressed() {
-    if(key == 'O'){
-      OPEN();
-    }
-  if(key == ENTER){
-      SEARCH();
-    }
   if (key == CODED) {
     if (keyCode == RIGHT) {
-      if (index+1<titles.length)       index = index+1;
+      if(index+1<titles.length)       index = index+1;
       /* request the selected item based on index n */
       println(titles[index]);
       String this_hash = createHash(titles[index]);
@@ -277,8 +308,8 @@ void keyPressed() {
       }
     }
     if (keyCode == LEFT) {
-      if (index!=0) index = index-1;
-
+      if(index!=0) index = index-1;
+      
       /* request the selected item based on index n */
       println(titles[index]);
       String this_hash = createHash(titles[index]);
@@ -290,6 +321,5 @@ void keyPressed() {
         }
       }
     }
-    
-  }
+}
 }

@@ -6,23 +6,15 @@ EuropaPress, Portada,http://www.europapress.es/rss/rss.aspx
 EuropaPress, España,http://www.europapress.es/rss/rss.aspx?ch=66
 EuropaPress, Internacional,http://www.europapress.es/rss/rss.aspx?ch=69
 EuropaPress, Economía,http://www.europapress.es/rss/rss.aspx?ch=136
-Reuters, Business,http://feeds.reuters.com/reuters/businessNews
-Reuters, World News,http://feeds.reuters.com/Reuters/worldNews
-Reuters, Politics,http://feeds.reuters.com/Reuters/PoliticsNews
-Reuters, Top News,http://feeds.reuters.com/reuters/topNews
-Reuters, Technology Sector,http://feeds.reuters.com/reuters/technologysectorNews
-Reuters, Global Markets,http://feeds.reuters.com/reuters/globalmarketsNews
+#Reuters, Business,http://feeds.reuters.com/reuters/businessNews
+#Reuters, World News,http://feeds.reuters.com/Reuters/worldNews
+#Reuters, Politics,http://feeds.reuters.com/Reuters/PoliticsNews
+#Reuters, Top News,http://feeds.reuters.com/reuters/topNews
+#Reuters, Technology Sector,http://feeds.reuters.com/reuters/technologysectorNews
+#Reuters, Global Markets,http://feeds.reuters.com/reuters/globalmarketsNews
 Huffington Post, Spain,http://www.huffingtonpost.es/feeds/verticals/spain/index.xml
-El Mundo, Portada,http://estaticos.elmundo.es/elmundo/rss/portada.xml
+#El Mundo, Portada,http://estaticos.elmundo.es/elmundo/rss/portada.xml
 El Mundo, España,http://estaticos.elmundo.es/elmundo/rss/espana.xml
 El Mundo, Internacional,http://estaticos.elmundo.es/elmundo/rss/internacional.xml
 El Mundo, UE,http://estaticos.elmundo.es/elmundo/rss/union_europea.xml
 El Mundo, economia,http://estaticos.elmundo.es/elmundo/rss/economia.xml
-20 Minutos, General,http://www.20minutos.es/rss/
-ABC, Portada,http://www.abc.es/rss/feeds/abcPortada.xml
-ABC, Ultima Hora,http://www.abc.es/rss/feeds/abc_ultima.xml
-TVE, Noticias,http://www.rtve.es/rss/temas_noticias.xml
-Yahoo, Espana,https://es.noticias.yahoo.com/rss/nacional
-Yahoo, Sucesos,https://es.noticias.yahoo.com/rss/sucesos
-Yahoo, Mundo,https://es.noticias.yahoo.com/rss/mundo
-Yahoo, Europa,https://es.noticias.yahoo.com/rss/europa
